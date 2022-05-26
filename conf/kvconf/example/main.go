@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/lwch/kvconf"
+	"github.com/jkstack/jkframe/conf/kvconf"
 )
 
 func assert(err error) {

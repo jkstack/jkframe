@@ -10,10 +10,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      go:
-        - '1.16'
-        - '1.17'
-        - '1.18'
+      matrix:
+        go:
+          - '1.16'
+          - '1.17'
+          - '1.18'
     steps:
       - uses: actions/checkout@v3
 
@@ -28,10 +29,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      go:
-        - '1.16'
-        - '1.17'
-        - '1.18'
+      matrix:
+        go:
+          - '1.16'
+          - '1.17'
+          - '1.18'
 
     services:
       mysql:

@@ -1,6 +1,7 @@
 package logging
 
 import (
+	"fmt"
 	"log"
 	"math/rand"
 	"os"
@@ -38,6 +39,11 @@ func Warning(fmt string, a ...interface{}) {
 // Printf print log by format
 func Printf(fmt string, a ...interface{}) {
 	DefaultLogger.Printf(fmt, a...)
+}
+
+// Println print log from values
+func Println(v ...interface{}) {
+	DefaultLogger.Printf(fmt.Sprintln(v...))
 }
 
 // Flush flush log

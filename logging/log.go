@@ -106,7 +106,7 @@ func (l *Logger) Warning(fmt string, a ...interface{}) {
 	if !l.rateLimit() {
 		l.logger.rotate()
 	}
-	l.logger.printf("[WARN]"+fmt, a...)
+	l.logger.printf("[WARNING]"+fmt, a...)
 }
 
 // Printf print log with format

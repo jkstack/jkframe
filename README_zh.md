@@ -25,3 +25,7 @@
 ## 使用方法
 
     go get -u github.com/jkstack/jkframe
+
+## 文档
+
+GoDoc: https://pkg.go.dev/github.com/jkstack/jkframe

@@ -25,3 +25,7 @@ jkstack golang basic framework
 ## usage
 
     go get -u github.com/jkstack/jkframe
+
+## documentation
+
+GoDoc: https://pkg.go.dev/github.com/jkstack/jkframe

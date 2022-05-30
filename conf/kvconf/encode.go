@@ -73,7 +73,8 @@ func (e *Encoder) encodeMap(value reflect.Value) error {
 	return nil
 }
 
-// Marshaler custom marshaler interface
+// Marshaler custom marshaler interface,
+// the returned string value is the encoded value to write
 type Marshaler interface {
 	MarshalKV() (string, error)
 }

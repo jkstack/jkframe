@@ -90,7 +90,8 @@ func (d *Decoder) fill(line int, value reflect.Value, k, v string) error {
 	}
 }
 
-// Unmarshaler custom unmarshaler interface
+// Unmarshaler custom unmarshaler interface,
+// the param of UnmarshalKV function is the value from input
 type Unmarshaler interface {
 	UnmarshalKV(string) error
 }

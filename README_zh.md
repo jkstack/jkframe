@@ -29,3 +29,8 @@
 ## 文档
 
 GoDoc: https://pkg.go.dev/github.com/jkstack/jkframe
+
+## TODO
+
+1. prometheus埋点库封装
+2. 支持restful风格的API接口

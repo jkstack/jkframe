@@ -19,7 +19,7 @@ jkstack golang basic framework
 * [daemon](/daemon): daemon process supported, supported change run user in child process, supported restart when child process exited
 * [logging](/logging): log library, supported log level of each format, supported log rotate by date and log file size
 * [mysqlschema](/mysqlschema): mysql table schema and initialize data management tools, supported table schema version and initialize data version
-* [utils](/utils): common function, like UUID, assert, get callstack
+* [utils](/utils): useful function, like UUID, Assert, Trace and more
 * prometheus: prometheus library(developing)
 
 ## usage

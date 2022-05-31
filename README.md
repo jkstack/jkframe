@@ -20,7 +20,7 @@ jkstack golang basic framework
 * [logging](/logging): log library, supported log level of each format, supported log rotate by date and log file size
 * [mysqlschema](/mysqlschema): mysql table schema and initialize data management tools, supported table schema version and initialize data version
 * [utils](/utils): useful function, like UUID, Assert, Trace and more
-* prometheus: prometheus library(developing)
+* stat: prometheus library(developing)
 
 ## usage
 

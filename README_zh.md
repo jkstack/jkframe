@@ -20,7 +20,7 @@
 * [logging](/logging): log模块，支持log分级并输出不同格式的log，支持按照日期或日志文件大小自动切分等
 * [mysqlschema](/mysqlschema): mysql数据库表结构和初始化数据生成库，支持按照版本号进行表结构升级以及注入初始化数据
 * [utils](/utils): 一些常用方法，如生成随机字符串、assert、获取当前调用堆栈信息等
-* prometheus: 微服务埋点库，正在开发中
+* stat: 基于prometheus的微服务埋点库，正在开发中
 
 ## 使用方法
 

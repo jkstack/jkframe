@@ -44,8 +44,8 @@ func (tks *ticks) push(tick *Tick) {
 }
 
 type collectResult struct {
-	qps                     int
-	avg                     int64
+	qps                     float64
+	avg                     float64
 	p0, p50, p90, p99, p100 int64
 }
 
@@ -81,8 +81,8 @@ func (tks *ticks) collect() {
 	}
 
 	tks.vec.Reset()
-	tks.vec.With(prometheus.Labels{"tag": "qps"}).Set(float64(result.qps))
-	tks.vec.With(prometheus.Labels{"tag": "avg"}).Set(float64(result.avg))
+	tks.vec.With(prometheus.Labels{"tag": "qps"}).Set(result.qps)
+	tks.vec.With(prometheus.Labels{"tag": "avg"}).Set(result.avg)
 	tks.vec.With(prometheus.Labels{"tag": "p0"}).Set(float64(result.p0))
 	tks.vec.With(prometheus.Labels{"tag": "p50"}).Set(float64(result.p50))
 	tks.vec.With(prometheus.Labels{"tag": "p90"}).Set(float64(result.p90))
@@ -91,8 +91,8 @@ func (tks *ticks) collect() {
 }
 
 func collect(begin, end time.Time, elements []int64) collectResult {
-	qps := len(elements) / int(end.Sub(begin).Seconds())
-	avg := sum(elements) / int64(len(elements))
+	qps := float64(len(elements)) / end.Sub(begin).Seconds()
+	avg := sum(elements) / float64(len(elements))
 	sort.Slice(elements, func(i, j int) bool {
 		return elements[i] < elements[j]
 	})
@@ -101,7 +101,7 @@ func collect(begin, end time.Time, elements []int64) collectResult {
 	p99 := len(elements) * 99 / 100
 
 	return collectResult{
-		qps:  int(qps),
+		qps:  qps,
 		avg:  avg,
 		p0:   elements[0],
 		p50:  elements[p50],
@@ -111,10 +111,10 @@ func collect(begin, end time.Time, elements []int64) collectResult {
 	}
 }
 
-func sum(elements []int64) int64 {
-	var ret int64
+func sum(elements []int64) float64 {
+	var ret float64
 	for _, e := range elements {
-		ret += e
+		ret += float64(e)
 	}
 	return ret
 }

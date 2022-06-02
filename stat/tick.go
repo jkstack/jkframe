@@ -80,7 +80,6 @@ func (tks *ticks) collect() {
 		result = collect(begin, end, elements)
 	}
 
-	tks.vec.Reset()
 	tks.vec.With(prometheus.Labels{"tag": "qps"}).Set(result.qps)
 	tks.vec.With(prometheus.Labels{"tag": "avg"}).Set(result.avg)
 	tks.vec.With(prometheus.Labels{"tag": "p0"}).Set(float64(result.p0))

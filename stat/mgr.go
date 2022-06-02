@@ -23,8 +23,8 @@ func New(interval time.Duration) *Mgr {
 	}
 	go func() {
 		for {
-			time.Sleep(interval)
 			mgr.Collect()
+			time.Sleep(interval)
 		}
 	}()
 	return mgr

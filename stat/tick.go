@@ -43,6 +43,12 @@ func (tks *ticks) push(tick *Tick) {
 	tks.PushBack(tick)
 }
 
+type collectResult struct {
+	qps                     int
+	avg                     int64
+	p0, p50, p90, p99, p100 int64
+}
+
 func (tks *ticks) collect() {
 	elements := make([]int64, 0, tks.Len())
 
@@ -69,27 +75,24 @@ func (tks *ticks) collect() {
 	}
 	tks.Unlock()
 
-	if len(elements) == 0 {
-		tks.resetEmpty()
-		return
+	var result collectResult
+	if len(elements) > 0 {
+		result = collect(begin, end, elements)
 	}
-	tks.resetValue(begin, end, elements)
-}
 
-func (tks *ticks) resetEmpty() {
 	tks.vec.Reset()
-	tks.vec.With(prometheus.Labels{"tag": "qps"}).Set(0)
-	tks.vec.With(prometheus.Labels{"tag": "avg"}).Set(0)
-	tks.vec.With(prometheus.Labels{"tag": "p0"}).Set(0)
-	tks.vec.With(prometheus.Labels{"tag": "p50"}).Set(0)
-	tks.vec.With(prometheus.Labels{"tag": "p90"}).Set(0)
-	tks.vec.With(prometheus.Labels{"tag": "p99"}).Set(0)
-	tks.vec.With(prometheus.Labels{"tag": "p100"}).Set(0)
+	tks.vec.With(prometheus.Labels{"tag": "qps"}).Set(float64(result.qps))
+	tks.vec.With(prometheus.Labels{"tag": "avg"}).Set(float64(result.avg))
+	tks.vec.With(prometheus.Labels{"tag": "p0"}).Set(float64(result.p0))
+	tks.vec.With(prometheus.Labels{"tag": "p50"}).Set(float64(result.p50))
+	tks.vec.With(prometheus.Labels{"tag": "p90"}).Set(float64(result.p90))
+	tks.vec.With(prometheus.Labels{"tag": "p99"}).Set(float64(result.p99))
+	tks.vec.With(prometheus.Labels{"tag": "p100"}).Set(float64(result.p100))
 }
 
-func (tks *ticks) resetValue(begin, end time.Time, elements []int64) {
-	qps := float64(len(elements)) / end.Sub(begin).Seconds()
-	avg := sum(elements) / float64(len(elements))
+func collect(begin, end time.Time, elements []int64) collectResult {
+	qps := len(elements) / int(end.Sub(begin).Seconds())
+	avg := sum(elements) / int64(len(elements))
 	sort.Slice(elements, func(i, j int) bool {
 		return elements[i] < elements[j]
 	})
@@ -97,20 +100,21 @@ func (tks *ticks) resetValue(begin, end time.Time, elements []int64) {
 	p90 := len(elements) * 9 / 10
 	p99 := len(elements) * 99 / 100
 
-	tks.vec.Reset()
-	tks.vec.With(prometheus.Labels{"tag": "qps"}).Set(qps)
-	tks.vec.With(prometheus.Labels{"tag": "avg"}).Set(avg)
-	tks.vec.With(prometheus.Labels{"tag": "p0"}).Set(float64(elements[0]))
-	tks.vec.With(prometheus.Labels{"tag": "p50"}).Set(float64(elements[p50]))
-	tks.vec.With(prometheus.Labels{"tag": "p90"}).Set(float64(elements[p90]))
-	tks.vec.With(prometheus.Labels{"tag": "p99"}).Set(float64(elements[p99]))
-	tks.vec.With(prometheus.Labels{"tag": "p100"}).Set(float64(elements[len(elements)-1]))
+	return collectResult{
+		qps:  int(qps),
+		avg:  avg,
+		p0:   elements[0],
+		p50:  elements[p50],
+		p90:  elements[p90],
+		p99:  elements[p99],
+		p100: elements[len(elements)-1],
+	}
 }
 
-func sum(elements []int64) float64 {
-	var ret float64
+func sum(elements []int64) int64 {
+	var ret int64
 	for _, e := range elements {
-		ret += float64(e)
+		ret += e
 	}
 	return ret
 }

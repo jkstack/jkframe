@@ -1,19 +1,26 @@
 package stat
 
 import (
+	"net/http"
 	"sync"
 	"time"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // Mgr tick management
 type Mgr struct {
 	sync.RWMutex
-	data map[string]*ticks
+	handler http.Handler
+	data    map[string]*ticks
 }
 
 // New create management
 func New(interval time.Duration) *Mgr {
-	mgr := &Mgr{data: make(map[string]*ticks)}
+	mgr := &Mgr{
+		handler: promhttp.Handler(),
+		data:    make(map[string]*ticks),
+	}
 	go func() {
 		for {
 			time.Sleep(interval)
@@ -47,4 +54,9 @@ func (mgr *Mgr) Collect() {
 	for _, tks := range mgr.data {
 		tks.collect()
 	}
+}
+
+// ServeHTTP responds to an HTTP request
+func (mgr *Mgr) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	mgr.handler.ServeHTTP(w, r)
 }

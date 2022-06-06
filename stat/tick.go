@@ -69,7 +69,7 @@ func (tks *ticks) collect() {
 		if tk.end.After(end) {
 			end = tk.end
 		}
-		elements = append(elements, tk.end.Sub(tk.begin).Milliseconds())
+		elements = append(elements, tk.end.Sub(tk.begin).Microseconds())
 		next = element.Next()
 		tks.Remove(element)
 	}

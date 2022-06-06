@@ -5,7 +5,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jkstack/jkframe/logging"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -13,14 +12,15 @@ import (
 type Mgr struct {
 	sync.RWMutex
 	handler http.Handler
-	data    map[string]*ticks
+	ticks   map[string]*ticks
+	counter map[string]*Counter
 }
 
 // New create management
 func New(interval time.Duration) *Mgr {
 	mgr := &Mgr{
 		handler: promhttp.Handler(),
-		data:    make(map[string]*ticks),
+		ticks:   make(map[string]*ticks),
 	}
 	go func() {
 		for {
@@ -31,34 +31,44 @@ func New(interval time.Duration) *Mgr {
 	return mgr
 }
 
-// New create new tick
-func (mgr *Mgr) New(name string) *Tick {
+// NewTick create new tick
+func (mgr *Mgr) NewTick(name string) *Tick {
 	tick := &Tick{
 		begin: time.Now(),
 		end:   time.Now(),
 	}
 	mgr.Lock()
-	list, ok := mgr.data[name]
+	list, ok := mgr.ticks[name]
 	if !ok {
 		list = newTicks(name)
-		mgr.data[name] = list
+		mgr.ticks[name] = list
 	}
 	mgr.Unlock()
 	list.push(tick)
 	return tick
 }
 
+func (mgr *Mgr) NewCounter(name string) *Counter {
+	mgr.Lock()
+	ct, ok := mgr.counter[name]
+	if !ok {
+		ct = newCounter(name)
+		mgr.counter[name] = ct
+	}
+	mgr.Unlock()
+	return ct
+}
+
 // Collect compute default values and export
 func (mgr *Mgr) Collect() {
 	mgr.RLock()
 	defer mgr.RUnlock()
-	for _, tks := range mgr.data {
+	for _, tks := range mgr.ticks {
 		tks.collect()
 	}
 }
 
 // ServeHTTP responds to an HTTP request
 func (mgr *Mgr) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	logging.Info("metrics tick")
 	mgr.handler.ServeHTTP(w, r)
 }

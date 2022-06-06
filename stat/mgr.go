@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/jkstack/jkframe/logging"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -58,5 +59,6 @@ func (mgr *Mgr) Collect() {
 
 // ServeHTTP responds to an HTTP request
 func (mgr *Mgr) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	logging.Info("metrics tick")
 	mgr.handler.ServeHTTP(w, r)
 }

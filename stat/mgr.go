@@ -48,6 +48,7 @@ func (mgr *Mgr) NewTick(name string) *Tick {
 	return tick
 }
 
+// NewCounter create new counter
 func (mgr *Mgr) NewCounter(name string) *Counter {
 	mgr.Lock()
 	ct, ok := mgr.counter[name]

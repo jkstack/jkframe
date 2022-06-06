@@ -76,7 +76,7 @@ func (tks *ticks) collect() {
 	tks.Unlock()
 
 	var result collectResult
-	if len(elements) > 0 {
+	if len(elements) > 0 && end.Sub(begin).Seconds() > 1 {
 		result = collect(begin, end, elements)
 	}
 

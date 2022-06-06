@@ -21,6 +21,7 @@ func New(interval time.Duration) *Mgr {
 	mgr := &Mgr{
 		handler: promhttp.Handler(),
 		ticks:   make(map[string]*ticks),
+		counter: make(map[string]*Counter),
 	}
 	go func() {
 		for {

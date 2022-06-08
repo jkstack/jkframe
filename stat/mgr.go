@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
@@ -14,6 +15,7 @@ type Mgr struct {
 	handler http.Handler
 	ticks   map[string]*ticks
 	counter map[string]*Counter
+	raw     map[string]*prometheus.GaugeVec
 }
 
 // New create management
@@ -22,6 +24,7 @@ func New(interval time.Duration) *Mgr {
 		handler: promhttp.Handler(),
 		ticks:   make(map[string]*ticks),
 		counter: make(map[string]*Counter),
+		raw:     make(map[string]*prometheus.GaugeVec),
 	}
 	go func() {
 		for {
@@ -59,6 +62,22 @@ func (mgr *Mgr) NewCounter(name string) *Counter {
 	}
 	mgr.Unlock()
 	return ct
+}
+
+// RawVec get raw GaugeVec by name if not exists, create it
+func (mgr *Mgr) RawVec(name string, labels []string) *prometheus.GaugeVec {
+	mgr.Lock()
+	defer mgr.Unlock()
+	vec, ok := mgr.raw[name]
+	if ok {
+		return vec
+	}
+	vec = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: name,
+	}, labels)
+	prometheus.MustRegister(vec)
+	mgr.raw[name] = vec
+	return vec
 }
 
 // Collect compute default values and export

@@ -39,3 +39,13 @@ func (ct *Counter) Inc() {
 func (ct *Counter) Dec() {
 	ct.gauge.Dec()
 }
+
+// Add add value to counter
+func (ct *Counter) Add(v float64) {
+	ct.gauge.Add(v)
+}
+
+// Sub sub value to counter
+func (ct *Counter) Sub(v float64) {
+	ct.gauge.Sub(v)
+}

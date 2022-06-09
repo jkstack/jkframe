@@ -18,7 +18,7 @@ type Mgr struct {
 	raw     map[string]*prometheus.GaugeVec
 }
 
-// New create management
+// New create management, the ticks will calculate by every interval time
 func New(interval time.Duration) *Mgr {
 	mgr := &Mgr{
 		handler: promhttp.Handler(),

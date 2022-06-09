@@ -2,6 +2,7 @@ package stat
 
 import (
 	"container/list"
+	"math"
 	"sort"
 	"sync"
 	"time"
@@ -100,8 +101,8 @@ func collect(begin, end time.Time, elements []int64) collectResult {
 		return elements[i] < elements[j]
 	})
 	p50 := len(elements) >> 1
-	p90 := len(elements) * 9 / 10
-	p99 := len(elements) * 99 / 100
+	p90 := int(math.Floor(float64(len(elements)) * 9 / 10))
+	p99 := int(math.Floor(float64(len(elements)) * 99 / 100))
 
 	return collectResult{
 		qps:  qps,

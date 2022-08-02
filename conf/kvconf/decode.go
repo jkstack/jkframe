@@ -62,6 +62,10 @@ func (d *Decoder) fill(line int, value reflect.Value, k, v string) error {
 		value.SetMapIndex(reflect.ValueOf(k), reflect.ValueOf(v))
 		return nil
 	case reflect.Struct:
+		if strings.Contains(k, ".") {
+			prefix := strings.Split(k, ".")
+			return d.fillStruct(line, value, prefix, v)
+		}
 		t := value.Type()
 		for i := 0; i < t.NumField(); i++ {
 			kf := t.Field(i)
@@ -88,6 +92,26 @@ func (d *Decoder) fill(line int, value reflect.Value, k, v string) error {
 	default:
 		return fmt.Errorf("invalid value on line %d, expected map or struct", line)
 	}
+}
+
+func (d *Decoder) fillStruct(line int, value reflect.Value, prefix []string, v string) error {
+	if len(prefix) == 0 {
+		return nil
+	}
+	t := value.Type()
+	for i := 0; i < t.NumField(); i++ {
+		kf := t.Field(i)
+		if kf.Tag.Get("kv") == "-" {
+			continue
+		}
+		if kf.Tag.Get("kv") == prefix[0] {
+			if len(prefix) == 1 {
+				return d.set(line, value.Field(i), v)
+			}
+			return d.fillStruct(line, value.Field(i), prefix[1:], v)
+		}
+	}
+	return nil
 }
 
 // Unmarshaler custom unmarshaler interface,

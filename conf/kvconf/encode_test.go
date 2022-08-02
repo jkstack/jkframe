@@ -45,12 +45,16 @@ func TestEncodeStruct(t *testing.T) {
 		C bool    `kv:"c"`
 		D float64 `kv:"d"`
 		E string  `kv:"e"`
+		F struct {
+			G string `kv:"g"`
+		} `kv:"f"`
 	}
 	st.A = 1
 	st.B = 2
 	st.C = true
 	st.D = 3.14
 	st.E = "abc"
+	st.F.G = "def"
 	var buf bytes.Buffer
 	err := NewEncoder(&buf).Encode(st)
 	if err != nil {
@@ -64,7 +68,8 @@ func TestEncodeStruct(t *testing.T) {
 		"b=2"+newLine+
 		"c=true"+newLine+
 		"d=3.14"+newLine+
-		"e=abc"+newLine {
+		"e=abc"+newLine+
+		"f.g=def"+newLine {
 		t.Fatalf("encode struct failed\n%s", buf.String())
 	}
 }

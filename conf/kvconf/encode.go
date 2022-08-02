@@ -5,6 +5,7 @@ import (
 	"io"
 	"reflect"
 	"runtime"
+	"strings"
 )
 
 // Encoder marshal encoder
@@ -27,7 +28,7 @@ func (e *Encoder) Encode(v interface{}) error {
 	case reflect.Map:
 		return e.encodeMap(vv)
 	case reflect.Struct:
-		return e.encodeStruct(vv)
+		return e.encodeStruct(vv, nil)
 	default:
 		return &UnsupportedTypeError{vv.Type()}
 	}
@@ -79,7 +80,7 @@ type Marshaler interface {
 	MarshalKV() (string, error)
 }
 
-func (e *Encoder) encodeStruct(value reflect.Value) error {
+func (e *Encoder) encodeStruct(value reflect.Value, prefix []string) error {
 	t := value.Type()
 	for i := 0; i < value.NumField(); i++ {
 		vv := value.Field(i)
@@ -89,6 +90,13 @@ func (e *Encoder) encodeStruct(value reflect.Value) error {
 			continue
 		}
 		if k == "-" {
+			continue
+		}
+		if vv.Kind() == reflect.Struct {
+			err := e.encodeStruct(vv, append(prefix, k))
+			if err != nil {
+				return err
+			}
 			continue
 		}
 		if vv.Type().NumMethod() > 0 && vv.CanInterface() {
@@ -129,10 +137,13 @@ func (e *Encoder) encodeStruct(value reflect.Value) error {
 		if err != nil {
 			return err
 		}
+		pfx := make([]string, len(prefix))
+		copy(pfx, prefix)
+		pfx = append(pfx, k)
 		if runtime.GOOS == "windows" {
-			_, err = fmt.Fprintf(e.w, "%s=%s\r\n", k, str)
+			_, err = fmt.Fprintf(e.w, "%s=%s\r\n", strings.Join(pfx, "."), str)
 		} else {
-			_, err = fmt.Fprintf(e.w, "%s=%s\n", k, str)
+			_, err = fmt.Fprintf(e.w, "%s=%s\n", strings.Join(pfx, "."), str)
 		}
 		if err != nil {
 			return err

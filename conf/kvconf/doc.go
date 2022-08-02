@@ -7,6 +7,8 @@
   you can define a custom Marshaler and Unmarshaler interface
   to process data by yourself.
 
+  supported decode and encode key in structure split in "." char.
+
   supported value types:
     interface{}
     map[string]interface{}

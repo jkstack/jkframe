@@ -51,7 +51,8 @@ func TestDecodeStruct(t *testing.T) {
 b = 2
 c = true
 d = 3.14
-e = abc`
+e = abc
+g.h = def`
 	var st1 struct {
 		A int     `kv:"a"`
 		B uint    `kv:"b"`
@@ -59,6 +60,9 @@ e = abc`
 		D float64 `kv:"d"`
 		E string  `kv:"e"`
 		F string  `kv:"f"`
+		G struct {
+			H string `kv:"h"`
+		} `kv:"g"`
 	}
 	err := NewDecoder(strings.NewReader(str)).Decode(&st1)
 	if err != nil {
@@ -78,6 +82,9 @@ e = abc`
 	}
 	if st1.E != "abc" {
 		t.Fatalf("unexpected st1 value of e, want abc current %s", st1.E)
+	}
+	if st1.G.H != "def" {
+		t.Fatalf("unexpected st1 value of g.h, want def current %s", st1.G.H)
 	}
 
 	var st2 struct{}

@@ -105,10 +105,13 @@ func (e *Encoder) encodeStruct(value reflect.Value, prefix []string) error {
 				if err != nil {
 					return fmt.Errorf("marshal custom value failed, err=%v", err)
 				}
+				pfx := make([]string, len(prefix))
+				copy(pfx, prefix)
+				pfx = append(pfx, k)
 				if runtime.GOOS == "windows" {
-					_, err = fmt.Fprintf(e.w, "%s=%s\r\n", k, v)
+					_, err = fmt.Fprintf(e.w, "%s=%s\r\n", strings.Join(pfx, "."), v)
 				} else {
-					_, err = fmt.Fprintf(e.w, "%s=%s\n", k, v)
+					_, err = fmt.Fprintf(e.w, "%s=%s\n", strings.Join(pfx, "."), v)
 				}
 				if err != nil {
 					return fmt.Errorf("marshal custom value failed, write error=%v", err)
@@ -122,10 +125,13 @@ func (e *Encoder) encodeStruct(value reflect.Value, prefix []string) error {
 				if err != nil {
 					return fmt.Errorf("marshal custom value failed, err=%v", err)
 				}
+				pfx := make([]string, len(prefix))
+				copy(pfx, prefix)
+				pfx = append(pfx, k)
 				if runtime.GOOS == "windows" {
-					_, err = fmt.Fprintf(e.w, "%s=%s\r\n", k, v)
+					_, err = fmt.Fprintf(e.w, "%s=%s\r\n", strings.Join(pfx, "."), v)
 				} else {
-					_, err = fmt.Fprintf(e.w, "%s=%s\n", k, v)
+					_, err = fmt.Fprintf(e.w, "%s=%s\n", strings.Join(pfx, "."), v)
 				}
 				if err != nil {
 					return fmt.Errorf("marshal custom value failed, write error=%v", err)

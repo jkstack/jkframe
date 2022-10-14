@@ -21,6 +21,7 @@ jkstack golang basic framework
 * [mysqlschema](/mysqlschema): mysql table schema and initialize data management tools, supported table schema version and initialize data version
 * [utils](/utils): useful function, like UUID, Assert, Trace and more
 * [stat](/stat): prometheus buried point library
+* [compress](/compress): compress data
 
 ## usage
 

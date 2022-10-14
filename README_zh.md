@@ -21,6 +21,7 @@
 * [mysqlschema](/mysqlschema): mysql数据库表结构和初始化数据生成库，支持按照版本号进行表结构升级以及注入初始化数据
 * [utils](/utils): 一些常用方法，如生成随机字符串、assert、获取当前调用堆栈信息等
 * [stat](/stat): 基于prometheus的微服务埋点库
+* [compress](/compress): 通用的数据压缩算法
 
 ## 使用方法
 

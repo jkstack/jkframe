@@ -6,6 +6,7 @@ require github.com/go-sql-driver/mysql v1.6.0
 
 require (
 	github.com/dustin/go-humanize v1.0.0
+	github.com/klauspost/compress v1.15.11
 	github.com/prometheus/client_golang v1.12.2
 	gopkg.in/yaml.v3 v3.0.0
 )

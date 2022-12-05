@@ -20,6 +20,8 @@ func TestLog(t *testing.T) {
 
 func TestGetLogOutput(t *testing.T) {
 	str := Info("foo %s", "bar")
+	str = strings.TrimSuffix(str, "\n")
+	str = strings.TrimSuffix(str, "\r")
 	if !strings.HasSuffix(str, "foo bar") {
 		t.Fatal("unexpected info log")
 	}

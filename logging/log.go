@@ -17,33 +17,33 @@ func init() {
 }
 
 // Debug print debug log
-func Debug(fmt string, a ...interface{}) {
-	DefaultLogger.Debug(fmt, a...)
+func Debug(fmt string, a ...interface{}) string {
+	return DefaultLogger.Debug(fmt, a...)
 }
 
 // Info print info log
-func Info(fmt string, a ...interface{}) {
-	DefaultLogger.Info(fmt, a...)
+func Info(fmt string, a ...interface{}) string {
+	return DefaultLogger.Info(fmt, a...)
 }
 
 // Error print error log
-func Error(fmt string, a ...interface{}) {
-	DefaultLogger.Error(fmt, a...)
+func Error(fmt string, a ...interface{}) string {
+	return DefaultLogger.Error(fmt, a...)
 }
 
 // Warning print warning log
-func Warning(fmt string, a ...interface{}) {
-	DefaultLogger.Warning(fmt, a...)
+func Warning(fmt string, a ...interface{}) string {
+	return DefaultLogger.Warning(fmt, a...)
 }
 
 // Printf print log by format
-func Printf(fmt string, a ...interface{}) {
-	DefaultLogger.Printf(fmt, a...)
+func Printf(fmt string, a ...interface{}) string {
+	return DefaultLogger.Printf(fmt, a...)
 }
 
 // Println print log from values
-func Println(v ...interface{}) {
-	DefaultLogger.Printf(fmt.Sprintln(v...))
+func Println(v ...interface{}) string {
+	return DefaultLogger.Printf(fmt.Sprintln(v...))
 }
 
 // Flush flush log
@@ -71,51 +71,52 @@ func (l *Logger) resetLastCheck() {
 }
 
 // Debug print debug log
-func (l *Logger) Debug(fmt string, a ...interface{}) {
+func (l *Logger) Debug(fmt string, a ...interface{}) string {
 	defer l.resetLastCheck()
 	if !l.rateLimit() {
 		l.logger.rotate()
 	}
 	if rand.Intn(1000) < 1 {
-		l.logger.printf("[DEBUG]"+fmt, a...)
+		return l.logger.printf("[DEBUG]"+fmt, a...)
 	}
+	return ""
 }
 
 // Info print info log
-func (l *Logger) Info(fmt string, a ...interface{}) {
+func (l *Logger) Info(fmt string, a ...interface{}) string {
 	defer l.resetLastCheck()
 	if !l.rateLimit() {
 		l.logger.rotate()
 	}
-	l.logger.printf("[INFO]"+fmt, a...)
+	return l.logger.printf("[INFO]"+fmt, a...)
 }
 
 // Error print error log
-func (l *Logger) Error(fmt string, a ...interface{}) {
+func (l *Logger) Error(fmt string, a ...interface{}) string {
 	defer l.resetLastCheck()
 	if !l.rateLimit() {
 		l.logger.rotate()
 	}
 	trace := strings.Join(utils.Trace("  + "), separator)
-	l.logger.printf("[ERROR]"+fmt+separator+trace, a...)
+	return l.logger.printf("[ERROR]"+fmt+separator+trace, a...)
 }
 
 // Warning print warning log
-func (l *Logger) Warning(fmt string, a ...interface{}) {
+func (l *Logger) Warning(fmt string, a ...interface{}) string {
 	defer l.resetLastCheck()
 	if !l.rateLimit() {
 		l.logger.rotate()
 	}
-	l.logger.printf("[WARNING]"+fmt, a...)
+	return l.logger.printf("[WARNING]"+fmt, a...)
 }
 
 // Printf print log with format
-func (l *Logger) Printf(fmt string, a ...interface{}) {
+func (l *Logger) Printf(fmt string, a ...interface{}) string {
 	defer l.resetLastCheck()
 	if !l.rateLimit() {
 		l.logger.rotate()
 	}
-	l.logger.printf(fmt, a...)
+	return l.logger.printf(fmt, a...)
 }
 
 // Write write log

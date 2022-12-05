@@ -103,8 +103,8 @@ func (l *rotateDateLogger) rotate() {
 	l.date = now
 }
 
-func (l *rotateDateLogger) printf(fmt string, a ...interface{}) {
-	l.w.Printf(fmt, a...)
+func (l *rotateDateLogger) printf(fmt string, a ...interface{}) string {
+	return l.w.Printf(fmt, a...)
 }
 
 func (l *rotateDateLogger) write(str string) {

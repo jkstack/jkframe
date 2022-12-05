@@ -1,13 +1,14 @@
 package logging
 
 import (
+	"fmt"
 	"log"
 	"time"
 )
 
 type logger interface {
 	rotate()
-	printf(string, ...interface{})
+	printf(string, ...interface{}) string
 	write(string)
 	flush()
 }
@@ -21,8 +22,9 @@ var DefaultLogger Logger = Logger{
 type dummyLogger struct{}
 
 func (l dummyLogger) rotate() {}
-func (l dummyLogger) printf(fmt string, a ...interface{}) {
-	log.Printf(fmt, a...)
+func (l dummyLogger) printf(format string, a ...interface{}) string {
+	log.Printf(format, a...)
+	return fmt.Sprintf(format, a...)
 }
 func (l dummyLogger) write(str string) {
 	log.Print(str)

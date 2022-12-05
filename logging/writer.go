@@ -25,17 +25,18 @@ func newWriter(w io.Writer) *writer {
 	return &writer{w: w}
 }
 
-func (w *writer) Printf(format string, v ...interface{}) {
-	w.log(fmt.Sprintf(format, v...))
+func (w *writer) Printf(format string, v ...interface{}) string {
+	return w.log(fmt.Sprintf(format, v...))
 }
 
 func (w *writer) Write(str string) {
 	w.log(str)
 }
 
-func (w *writer) log(s string) {
+func (w *writer) log(s string) string {
 	s = time.Now().Format("2006/01/02 15:04:05 ") + s + separator
 	w.Lock()
 	defer w.Unlock()
 	w.w.Write([]byte(s))
+	return s
 }

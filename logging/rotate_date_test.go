@@ -1,6 +1,8 @@
 package logging
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestLog(t *testing.T) {
 	SetDateRotate(DateRotateConfig{
@@ -12,5 +14,12 @@ func TestLog(t *testing.T) {
 	})
 	for i := 0; i < 10000; i++ {
 		Info("i=%d", i)
+	}
+}
+
+func TestGetLogOutput(t *testing.T) {
+	str := Info("foo %s", "bar")
+	if str != "[INFO]foo bar" {
+		t.Fatal("unexpected info log")
 	}
 }

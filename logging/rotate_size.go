@@ -141,5 +141,5 @@ func (l *rotateSizeLogger) files() []string {
 	if err == nil {
 		ret = append(ret, files...)
 	}
-	return files
+	return ret
 }

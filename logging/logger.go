@@ -11,6 +11,7 @@ type logger interface {
 	printf(string, ...interface{}) string
 	write(string)
 	flush()
+	files() []string
 }
 
 // DefaultLogger default logger by log package
@@ -30,3 +31,6 @@ func (l dummyLogger) write(str string) {
 	log.Print(str)
 }
 func (l dummyLogger) flush() {}
+func (l dummyLogger) files() []string {
+	return nil
+}

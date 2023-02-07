@@ -51,6 +51,11 @@ func Flush() {
 	DefaultLogger.flush()
 }
 
+// Files get log files
+func Files() []string {
+	return DefaultLogger.files()
+}
+
 // Logger logger interface
 type Logger struct {
 	logger

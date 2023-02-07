@@ -130,3 +130,16 @@ func (l *rotateSizeLogger) flush() {
 		f.Sync()
 	}
 }
+
+func (l *rotateSizeLogger) files() []string {
+	if !l.cfg.WriteFile {
+		return nil
+	}
+	var ret []string
+	ret = append(ret, filepath.Join(l.cfg.Dir, l.cfg.Name+".log"))
+	files, err := filepath.Glob(filepath.Join(l.cfg.Dir, l.cfg.Name+".log.*"))
+	if err == nil {
+		ret = append(ret, files...)
+	}
+	return files
+}

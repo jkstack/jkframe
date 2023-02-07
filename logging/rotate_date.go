@@ -117,3 +117,16 @@ func (l *rotateDateLogger) flush() {
 		f.Sync()
 	}
 }
+
+func (l *rotateDateLogger) files() []string {
+	if !l.cfg.WriteFile {
+		return nil
+	}
+	var ret []string
+	ret = append(ret, filepath.Join(l.cfg.Dir, l.cfg.Name+".log"))
+	files, err := filepath.Glob(filepath.Join(l.cfg.Dir, l.cfg.Name+"_*.log"))
+	if err == nil {
+		ret = append(ret, files...)
+	}
+	return ret
+}

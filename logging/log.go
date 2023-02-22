@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/jkstack/jkframe/utils"
@@ -58,12 +59,16 @@ func Files() []string {
 
 // Logger logger interface
 type Logger struct {
+	sync.RWMutex
 	logger
 	lastCheck time.Time
 }
 
 func (l *Logger) rateLimit() bool {
-	if time.Since(l.lastCheck).Seconds() <= 1 {
+	l.RLock()
+	diff := time.Since(l.lastCheck).Seconds()
+	l.RUnlock()
+	if diff <= 1 {
 		if rand.Intn(100) > 0 {
 			return true
 		}
@@ -72,7 +77,9 @@ func (l *Logger) rateLimit() bool {
 }
 
 func (l *Logger) resetLastCheck() {
+	l.Lock()
 	l.lastCheck = time.Now()
+	l.Unlock()
 }
 
 // Debug print debug log

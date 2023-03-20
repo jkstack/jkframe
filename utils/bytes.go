@@ -66,3 +66,13 @@ func (data *Bytes) Bytes() uint64 {
 func (data Bytes) String() string {
 	return humanize.IBytes(uint64(data))
 }
+
+// Unit get unit
+func (data Bytes) Unit() string {
+	str := humanize.IBytes(uint64(data))
+	tmp := strings.SplitN(str, " ", 2)
+	if len(tmp) == 2 {
+		return tmp[1]
+	}
+	return ""
+}

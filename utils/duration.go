@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"regexp"
 	"time"
 )
 
@@ -30,4 +31,30 @@ func (d Duration) String() string {
 // Duration get duration
 func (d Duration) Duration() time.Duration {
 	return time.Duration(d)
+}
+
+var trimNumber = regexp.MustCompile(`\d+`)
+
+// Unit get unit
+func (d Duration) Unit() string {
+	dt := time.Duration(d)
+	if dt.Hours() >= 1 {
+		return "h"
+	}
+	if dt.Minutes() >= 1 {
+		return "m"
+	}
+	if dt.Seconds() >= 1 {
+		return "s"
+	}
+	if dt.Milliseconds() >= 1 {
+		return "ms"
+	}
+	if dt.Microseconds() >= 1 {
+		return "us"
+	}
+	if dt.Nanoseconds() >= 1 {
+		return "ns"
+	}
+	return ""
 }

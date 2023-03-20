@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/dustin/go-humanize"
@@ -65,6 +66,17 @@ func (data *Bytes) Bytes() uint64 {
 // String format to string
 func (data Bytes) String() string {
 	return humanize.IBytes(uint64(data))
+}
+
+// Number get number
+func (data Bytes) Number() uint64 {
+	str := humanize.IBytes(uint64(data))
+	tmp := strings.SplitN(str, " ", 2)
+	if len(tmp) == 2 {
+		n, _ := strconv.ParseUint(tmp[0], 10, 64)
+		return n
+	}
+	return 0
 }
 
 // Unit get unit

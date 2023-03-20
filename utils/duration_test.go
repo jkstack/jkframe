@@ -31,3 +31,30 @@ func TestDurationUnit(t *testing.T) {
 		t.Fatalf("unexpected duration unit: %s", d.Unit())
 	}
 }
+
+func TestDurationNumber(t *testing.T) {
+	d := Duration(time.Hour)
+	if d.Number() != 1 {
+		t.Fatalf("unexpected duration number: %d", d.Number())
+	}
+	d = Duration(time.Minute)
+	if d.Number() != 1 {
+		t.Fatalf("unexpected duration number: %d", d.Number())
+	}
+	d = Duration(time.Second)
+	if d.Number() != 1 {
+		t.Fatalf("unexpected duration number: %d", d.Number())
+	}
+	d = Duration(time.Millisecond)
+	if d.Number() != 1 {
+		t.Fatalf("unexpected duration number: %d", d.Number())
+	}
+	d = Duration(time.Microsecond)
+	if d.Number() != 1 {
+		t.Fatalf("unexpected duration number: %d", d.Number())
+	}
+	d = Duration(time.Nanosecond)
+	if d.Number() != 1 {
+		t.Fatalf("unexpected duration number: %d", d.Number())
+	}
+}

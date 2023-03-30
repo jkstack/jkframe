@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"math"
 	"strconv"
 	"strings"
 
@@ -73,8 +74,8 @@ func (data Bytes) Number() uint64 {
 	str := humanize.IBytes(uint64(data))
 	tmp := strings.SplitN(str, " ", 2)
 	if len(tmp) == 2 {
-		n, _ := strconv.ParseUint(tmp[0], 10, 64)
-		return n
+		n, _ := strconv.ParseFloat(tmp[0], 64)
+		return uint64(math.Ceil(n))
 	}
 	return 0
 }

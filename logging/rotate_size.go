@@ -17,6 +17,7 @@ import (
 
 // SizeRoateConfig size logger config
 type SizeRotateConfig struct {
+	Level       Level  // log level
 	Dir         string // log file save directory, only used if WriteFile=true
 	Name        string // log file name, only used if WriteFile=true
 	Size        int64  // rotate when file >= Size, only used if WriteFile=true
@@ -70,6 +71,10 @@ func NewRotateSizeLogger(cfg SizeRotateConfig) Logger {
 // SetSizeRotate set log rotate by size
 func SetSizeRotate(cfg SizeRotateConfig) {
 	DefaultLogger = NewRotateSizeLogger(cfg)
+}
+
+func (l *rotateSizeLogger) currentLevel() Level {
+	return l.cfg.Level
 }
 
 func (l *rotateSizeLogger) rotate() {

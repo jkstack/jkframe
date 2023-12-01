@@ -14,6 +14,7 @@ import (
 
 // DateRotateConfig date logger config
 type DateRotateConfig struct {
+	Level       Level  // log level
 	Dir         string // log file save directory, only used if WriteFile=true
 	Name        string // log file name, only used if WriteFile=true
 	Rotate      int    // save rotated file count, only used if WriteFile=true
@@ -68,6 +69,10 @@ func NewRotateDateLogger(cfg DateRotateConfig) Logger {
 // SetDateRotate set log rotate by date
 func SetDateRotate(cfg DateRotateConfig) {
 	DefaultLogger = NewRotateDateLogger(cfg)
+}
+
+func (l *rotateDateLogger) currentLevel() Level {
+	return l.cfg.Level
 }
 
 func (l *rotateDateLogger) rotate() {

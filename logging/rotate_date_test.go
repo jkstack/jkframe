@@ -7,6 +7,7 @@ import (
 
 func TestLog(t *testing.T) {
 	SetDateRotate(DateRotateConfig{
+		Level:       LevelInfo,
 		Dir:         "./logs",
 		Name:        "test",
 		Rotate:      7,

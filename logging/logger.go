@@ -18,7 +18,7 @@ type logger interface {
 
 // DefaultLogger default logger by log package
 var DefaultLogger Logger = Logger{
-	logger:    &dummyLogger{},
+	logger:    &dummyLogger{level: LevelInfo},
 	lastCheck: time.Now(),
 }
 

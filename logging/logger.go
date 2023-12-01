@@ -7,6 +7,7 @@ import (
 )
 
 type logger interface {
+	setLevel(Level)
 	currentLevel() Level
 	rotate()
 	printf(string, ...interface{}) string
@@ -17,14 +18,19 @@ type logger interface {
 
 // DefaultLogger default logger by log package
 var DefaultLogger Logger = Logger{
-	logger:    dummyLogger{},
+	logger:    &dummyLogger{},
 	lastCheck: time.Now(),
 }
 
-type dummyLogger struct{}
+type dummyLogger struct {
+	level Level
+}
 
+func (l *dummyLogger) setLevel(level Level) {
+	l.level = level
+}
 func (l dummyLogger) currentLevel() Level {
-	return LevelInfo
+	return l.level
 }
 func (l dummyLogger) rotate() {}
 func (l dummyLogger) printf(format string, a ...interface{}) string {

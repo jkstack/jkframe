@@ -71,6 +71,10 @@ func SetDateRotate(cfg DateRotateConfig) {
 	DefaultLogger = NewRotateDateLogger(cfg)
 }
 
+func (l *rotateDateLogger) setLevel(level Level) {
+	l.cfg.Level = level
+}
+
 func (l *rotateDateLogger) currentLevel() Level {
 	return l.cfg.Level
 }

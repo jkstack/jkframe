@@ -17,6 +17,11 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
+// SetLevel set log level
+func SetLevel(level Level) {
+	DefaultLogger.setLevel(level)
+}
+
 // Debug print debug log
 func Debug(fmt string, a ...interface{}) string {
 	return DefaultLogger.Debug(fmt, a...)

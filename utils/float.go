@@ -26,3 +26,8 @@ func (data Float64P2) MarshalKV() (string, error) {
 func (data Float64P2) Float() float64 {
 	return float64(data)
 }
+
+// String get string data
+func (data Float64P2) String() string {
+	return fmt.Sprintf("%.2f", data)
+}
